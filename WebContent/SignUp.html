@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+<meta charset="utf-8">
+<title>Sign Up</title>
+<script>
+	var click_chk = 0;
+	function check_id(n) {
+		var get_id
+		if(n==1){//wizardInput
+			get_id = document.wizardInput.input_id1.value;
+		}
+		else if(n==2){//shopInput
+			get_id = document.shopInput.input_id2.value;
+		}
+		else if(n==3){//customerInput
+			get_id = document.customerInput.input_id3.value;
+		}
+		
+		if (get_id == '') {
+			alert('아이디를 입력하세요');
+			return;
+		} else if (event.keyCode == 8 || event.keyCode == 9
+				|| event.keyCode == 37 || event.keyCode == 39
+				|| event.keyCode == 46)
+			return;
+		else {
+			var url = "check_id.jsp?get_id=" + get_id + "&n="+n;
+			var ret = window.open(url, get_id,
+							"width = 500, height = 500, top = 100, left = 200, location = no");
+			if (ret == 'cancel') {
+				alert('ID 확인 취소');
+				if(n==1){
+					document.getElementById('input_id1').disabled = false;
+					document.setElementById('checked_id1').value = "false";
+				}
+				else if(n==2){
+					document.getElementById('input_id2').disabled = false;
+					document.setElementById('checked_id2').value = "false";
+				}
+				else if(n==3){
+					document.getElementById('input_id3').disabled = false;
+					document.setElementById('checked_id3').value = "false";	
+				}
+				click_chk = 0;
+			} else if (ret != 'cancel' && ret != 'disable') {
+				if(n==1){
+					document.getElementById('input_id1').readOnly = 'true';
+					document.getElementById('ID').value = get_id;
+					document.getElementById('checked_id1').value = "true";
+				}
+				else if(n==2){
+					document.getElementById('input_id2').readOnly = 'true';
+					document.getElementById('ID').value = get_id;
+					document.getElementById('checked_id2').value = "true";				
+				}
+				else if(n==3){
+					document.getElementById('input_id3').readOnly = 'true';
+					document.getElementById('ID').value = get_id;
+					document.getElementById('checked_id3').value = "true";				
+				}
+			}
+		}
+	}
+	function numkeyCheck(e) {
+		var keyValue = event.keyCode;
+		if (((keyValue >= 48) && (keyValue <= 57)))
+			return true;
+		else
+			return false;
+	}
+</script>
+<style>
+td, tr, th {
+	border: 1px gray solid;
+	text-align: center;
+}
+table{
+	width="50%";
+	border-collapse: collapse; 
+	border: 1px gray solid; margin-top: 20px; 
+	margin-left: auto; margin-right: auto;"
+	cellpadding="5";
+}
+</style>
+
+<script>
+	function getOption(){
+		var obj = document.getElementById("roleSelect");
+		if (obj.selectedIndex == 0){
+			document.getElementById("wizardTable").style.display = "";
+			document.getElementById("shopTable").style.display = "none";
+			document.getElementById("customerTable").style.display = "none";
+
+		}
+		else if(obj.selectedIndex==1){
+			document.getElementById("wizardTable").style.display="none";
+			document.getElementById("shopTable").style.display = "";
+			document.getElementById("customerTable").style.display = "none";
+		}
+		else if(obj.selectedIndex==2){
+			document.getElementById("wizardTable").style.display="none";
+			document.getElementById("shopTable").style.display = "none";
+			document.getElementById("customerTable").style.display = "";
+		}
+		else{
+			console.log('role을 선택하세요');
+		}
+	}
+	
+	function checkPw(){
+		var pw = document.getElementById("input_pw1").value;
+		var pw_ck = document.getElementById("input_pw2").value;
+		
+		if(pw !='' && pw_ck != ''){
+			if(pw==pw_ck){
+				document.getElementById('pwsame').innerHTML = '비밀번호가 일치합니다.';
+				document.getElementById('pwsame').style.color = 'blue';
+			}
+		}
+		if(pw!=pw_ck){
+			document.getElementById('pwsame').innerHTML = '비밀번호가 다릅니다. 다시 입력해주세요';
+			document.getElementById('pwsame').style.color = 'red';
+			return false;
+		}
+	}
+</script>
+
+</head>
+<body>
+
+	<div>
+		<form>
+			<label>본인의 role을 선택하세요.</label>
+			<select id = "roleSelect">
+				<option>wizard</option>
+				<option>shop</option>
+				<option>customer</option>
+			</select>
+			<input type="button" onclick="getOption()" value = "선택">
+			<p id="demo"></p>
+		</form>
+	</div>
+
+	<div style="text-align: center; display:none;" id = "wizardTable">
+		<font size="8">Wizard Sign Up</font> <br> <br>
+		<form method="post" action="aRegitWizard.jsp" name="wizardInput">
+			<table>
+				<tr>
+					<th width="30%">아이디</th>
+					<td width="70%">
+							<input type="text" size="15" name="input_id1" id="input_id1"
+								style='ime-mode: disabled' required=""> 
+							<input type="button"
+								value="중복체크" onclick="check_id(1);" id="chk_id">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">패스워드</th>
+					<td width="70%">
+							<input type="password" name="input_pw1" id="input_pw1" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">패스워드 확인</th>
+					<td width="70%">
+						<input type="password" name="input_pw2" id="input_pw2" onchange="checkPw()" required="">
+					</td>
+					<td>
+						<p id="pwsame" onchange=></p>
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">이름</th>
+					<td width="70%">
+						<input type="text" name="input_name" id="input_name" maxlength="255" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">나이</th>
+					<td width="70%">
+						<input type="number" min="1" max="150" name="input_age"
+								id="input_age" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">종족</th>
+					<td width="70%">
+							<select name="input_tribeSelect" id = "input_tribeSelect">
+								<option>human</option>
+								<option>elf</option>
+								<option>fairy</option>
+								<option>dwarf</option>
+								<option>hobbit</option>
+								<option>orc</option>
+								<option>dragon</option>
+							</select>
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">출신지</th>
+					<td width="70%">
+							<input type="text" size="20" maxlength="20" name="input_hometown" id="input_hometown" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">직업</th>
+					<td width="70%">
+							<input type="text" size="20" maxlength="20" name="input_occupation" id="input_occupation" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">클래스</th>
+					<td width="70%">
+							<input type="number" min="1" max="10" name="input_class" id="input_class" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">속성</th>
+					<td width="70%">
+							<select name="input_attributeSelect" id = "input_attributeSelect">
+								<option>water</option>
+								<option>fire</option>
+								<option>light</option>
+								<option>wind</option>
+								<option>electricity</option>
+								<option>darkness</option>
+								<option>earth</option>
+								<option>ice</option>
+							</select>
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">마나량</th>
+					<td width="70%">
+							<input type="number" min="1" name="input_mana" id="input_mana" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">소지금</th>
+					<td width="70%">
+							<input type="number" name="input_balance" id="input_balance" value = "1000" disabled="true">
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" value="" id="checked_id1" name="checked_id1">
+			<input type="hidden" value="" id="ID" name="ID"> <br> <input
+				type="submit" value="등록"
+				style="margin-left: auto; margin-right: auto;">
+		</form>
+	</div>
+	
+	<div style="text-align: center; display:none;" id = "shopTable">
+		<font size="8">Shop Sign Up</font> <br> <br>
+		<form method="post" action="aRegitShop.jsp" name="shopInput">
+			<table>
+				<tr>
+					<th width="30%">아이디</th>
+
+					<td width="70%">
+							<input type="text" size="15" name="input_id2" id="input_id2"
+								style='ime-mode: disabled' required=""> 
+							<input type="button"
+								value="중복체크" onclick="check_id(2)" id="chk_id">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">패스워드</th>
+					<td width="70%">
+							<input type="password" name="input_pw1" id="input_pw1" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">패스워드 확인</th>
+					<td width="70%">
+						<input type="password" name="input_pw2" id="input_pw2" onchange="checkPw()" required="">
+					</td>
+					<td>
+						<p id="pwsame" onchange=></p>
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">가게 이름</th>
+					<td width="70%">
+						<input type="text" name="input_name" id="input_name" maxlength="255" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">주소</th>
+					<td width="70%">
+						<input type="text" name="input_address" id="input_address" maxlength="255" required="">					
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">대표자이름</th>
+					<td width="70%">	
+						<input type="text" name="input_chiefname" id="input_chiefname" maxlength="255" required="">					
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">거래허가 클래스</th>
+					<td width="70%">
+							<input type="number" min="1" max="10" name="input_permitclass" id="input_permitclass" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">소지금</th>
+					<td width="70%">
+							<input type="number" name="input_shopbalance" id="input_shopbalance" value = "10000" disabled="true">
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" value="" id="checked_id2" name="checked_id2">
+			<input type="hidden" value="" id="ID" name="ID"> <br> <input
+				type="submit" value="등록"
+				style="margin-left: auto; margin-right: auto;">
+		</form>
+	</div>
+	
+	<div style="text-align: center; display:none;" id = "customerTable">
+		<font size="8">Customer Sign Up</font> <br> <br>
+		<form method="post" action="aRegitCustomer.jsp" name="customerInput">
+			<table>
+				<tr>
+					<th width="30%">아이디</th>
+
+					<td width="70%">
+							<input type="text" size="15" name="input_id3" id="input_id3"
+								style='ime-mode: disabled' required=""> 
+							<input type="button"
+								value="중복체크" onclick="check_id(3)" id="chk_id">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">패스워드</th>
+					<td width="70%">
+							<input type="password" name="input_pw1" id="input_pw1" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">패스워드 확인</th>
+					<td width="70%">
+						<input type="password" name="input_pw2" id="input_pw2" onchange="checkPw()" required="">
+					</td>
+					<td>
+						<p id="pwsame" onchange=></p>
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">이름</th>
+					<td width="70%">
+						<input type="text" name="input_name" id="input_name" maxlength="255" required="">
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">나이</th>
+					<td width="70%">
+						<input type="number" min="1" max="150" name="input_age"
+								id="input_age" required="">
+				</tr>
+				<tr>
+					<th width="30%">주소</th>
+					<td width="70%">	
+						<input type="text" name="input_address" id="input_address" maxlength="255" required="">					
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">속성</th>
+					<td width="70%">
+						<select name="input_attributeSelect" id = "input_attributeSelect">
+								<option>water</option>
+								<option>fire</option>
+								<option>light</option>
+								<option>wind</option>
+								<option>electricity</option>
+								<option>darkness</option>
+								<option>earth</option>
+								<option>ice</option>
+						</select>		
+					</td>
+				</tr>
+				<tr>
+					<th width="30%">소지금</th>
+					<td width="70%">
+							<input type="number" name="input_customerbalance" id="input_customerbalance" value = "1000" disabled="true">
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" value="" id="checked_id3" name="checked_id3">
+			<input type="hidden" value="" id="ID" name="ID"> <br> <input
+				type="submit" value="등록"
+				style="margin-left: auto; margin-right: auto;">
+		</form>
+	</div>
+
+</body>
+</html>
